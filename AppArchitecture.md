@@ -1,330 +1,216 @@
-# SensorLoggingService - Technical Flow Documentation
+# WatchApp - Architecture Overview
 
-## 📝 Brief Description
+## 📦 Project Structure
+```
+app/
+├── src/
+│   ├── main/
+│   │   ├── java/com/example/test_app/
+│   │   │   ├── presentation/
+│   │   │   │   ├── MainActivity.kt
+│   │   │   │   ├── SensorLoggingService.kt
+│   │   │   │   ├── WifiService.kt
+│   │   │   │   └── screens/
+│   │   │   │       ├── LoginScreen.kt
+│   │   │   │       ├── HomeScreen.kt
+│   │   │   │       └── OptionsPage.kt
+│   │   │   └── data/
+│   │   │       └── LoginCache.kt
+│   │   └── res/
+│   └── test/
+```
 
-The SensorLoggingService is a critical background service that handles sensor data collection and transmission in the Wear OS application. Here's what it does:
+## 🔄 Component Dependencies
 
-1. **MQTT Connection & Publishing**
+### 1. Core Dependencies
 ```kotlin
-// MQTT Configuration
-private lateinit var mqttClient: MqttAndroidClient
-private val mqttBrokerUri = "tcp://10.107.106.133:1883"
-private val mqttClientId = "WearOSSensorLogger"
-
-// Publishing to MQTT
-private fun publishMqttInternal(topic: String, message: String) {
-    if (mqttClient.isConnected) {
-        mqttClient.publish(topic, MqttMessage(message.toByteArray()))
-    }
+// build.gradle.kts
+dependencies {
+    // Android Core
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.wear:wear:1.3.0")
+    
+    // Compose
+    implementation("androidx.wear.compose:compose-material:1.2.1")
+    implementation("androidx.wear.compose:compose-foundation:1.2.1")
+    
+    // MQTT
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
+    
+    // Location Services
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+    
+    // Security
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 }
 ```
 
-2. **Data Caching with Queues**
-```kotlin
-// Queue Configuration for Data Caching
-private val gpsDataQueue = ArrayBlockingQueue<String>(5000)      // GPS data cache
-private val accelDataQueue = ArrayBlockingQueue<String>(5000)    // Accelerometer data cache
-private val heartRateDataQueue = ArrayBlockingQueue<String>(5000) // Heart rate data cache
-private val gyroDataQueue = ArrayBlockingQueue<String>(5000)     // Gyroscope data cache
-```
+## 🔗 Component Connections
 
-3. **Sensor Data Collection**
-- Accelerometer (x, y, z coordinates)
-- Heart Rate (BPM)
-- GPS Location (latitude, longitude)
-- Gyroscope (rotation data)
-- Step Detection
-- Linear Acceleration
-- Rotation Vector
-
-4. **Background Processing**
-- Maintains a foreground service to prevent system kill
-- Implements keep-alive mechanism for WiFi connection
-- Monitors memory usage and queue sizes
-- Handles automatic reconnection to MQTT broker
-
-5. **Error Recovery**
-- Implements retry mechanism for failed MQTT publishes
-- Caches data when offline
-- Automatically reconnects to MQTT broker
-- Handles sensor unavailability gracefully
-
-The service uses a queue-based architecture to ensure no data is lost when the device is offline or experiencing connectivity issues. Each sensor type has its own dedicated queue with a capacity of 5000 entries, allowing for robust data caching during network interruptions.
-
-## 🔄 Service Overview
-
+### 1. Service Communication
 ```mermaid
 graph TD
-    A[Service Start] --> B[Initialize Components]
-    B --> C[Start Sensors]
-    B --> D[Connect MQTT]
-    B --> E[Start Location]
-    C --> F[Data Collection]
-    D --> G[Data Publishing]
-    E --> H[GPS Updates]
-    F --> G
-    H --> G
+    A[MainActivity] --> B[SensorLoggingService]
+    A --> C[WifiService]
+    B --> D[MQTT Broker]
+    B --> E[Android Sensors]
+    C --> F[WiFi Manager]
+    B --> G[Location Services]
 ```
 
-## 📱 Service Initialization Flow
-
-### 1. Service Creation
-```kotlin
-class SensorLoggingService : Service(), SensorEventListener {
-    // 1. Sensor Managers
-    private lateinit var sensorManager: SensorManager
-    private var accelerometerSensor: Sensor? = null
-    private var heartRateSensor: Sensor? = null
-    private var gyroscopeSensor: Sensor? = null
-    // ... other sensors
-
-    // 2. MQTT Configuration
-    private lateinit var mqttClient: MqttAndroidClient
-    private val mqttBrokerUri = "tcp://10.107.106.133:1883"
-    private val mqttClientId = "WearOSSensorLogger"
-
-    // 3. Data Queues
-    private val gpsDataQueue = ArrayBlockingQueue<String>(5000)
-    private val accelDataQueue = ArrayBlockingQueue<String>(5000)
-    private val heartRateDataQueue = ArrayBlockingQueue<String>(5000)
-    // ... other queues
-}
-```
-
-### 2. Service Lifecycle
+### 2. Data Flow
 ```mermaid
 sequenceDiagram
-    participant OS as Android OS
+    participant MA as MainActivity
     participant SS as SensorService
+    participant WS as WifiService
     participant MQTT as MQTT Broker
     participant S as Sensors
 
-    OS->>SS: onCreate
-    SS->>SS: Initialize Components
-    SS->>MQTT: Connect MQTT
+    MA->>SS: Start Service
+    MA->>WS: Start Service
+    WS->>WS: Monitor WiFi
     SS->>S: Register Listeners
-    SS->>SS: Start Foreground
-    Note over SS: Service Running
-    OS->>SS: onDestroy
-    SS->>S: Unregister Listeners
-    SS->>MQTT: Disconnect
+    S->>SS: Send Data
+    SS->>MQTT: Publish Data
 ```
 
-## 🔄 Data Collection Flow
+## 📱 Screen Navigation
 
-### 1. Sensor Data Collection
+### 1. Screen Flow
 ```mermaid
 graph TD
-    A[Sensor Event] --> B[onSensorChanged]
-    B --> C{Check Sensor Type}
-    C -->|Accelerometer| D[Process Accel Data]
-    C -->|Heart Rate| E[Process Heart Rate]
-    C -->|Gyroscope| F[Process Gyro Data]
-    C -->|GPS| G[Process Location]
-    D --> H[Queue Data]
-    E --> H
-    F --> H
-    G --> H
+    A[App Launch] --> B[MainActivity]
+    B --> C{Check Login}
+    C -->|Not Logged In| D[LoginScreen]
+    C -->|Logged In| E[HomeScreen]
+    D -->|Login Success| E
+    E --> F[OptionsPage]
 ```
 
-### 2. Data Processing
+## 🔐 Security Implementation
+
+### 1. Secure Storage
 ```kotlin
-override fun onSensorChanged(event: SensorEvent?) {
-    event?.let { it ->
-        when (it.sensor.type) {
-            Sensor.TYPE_ACCELEROMETER -> {
-                // 1. Get values
-                val x = it.values[0]
-                val y = it.values[1]
-                val z = it.values[2]
+// LoginCache.kt
+class LoginCache(private val context: Context) {
+    private val masterKey = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
 
-                // 2. Format data
-                val influxLine = "accelerometer,watch=${watchModel}..." +
-                    "x=$x,y=$y,z=$z ${currentTimeMillis * 1_000_000}"
+    private val sharedPreferences = EncryptedSharedPreferences.create(
+        context,
+        "login_cache",
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+}
+```
 
-                // 3. Queue data
-                accelDataQueue.offer(influxLine)
-            }
-            // ... other sensor types
-        }
+## 📊 Data Management
+
+### 1. Queue System
+```kotlin
+// SensorLoggingService.kt
+class SensorLoggingService : Service() {
+    // Data Queues
+    private val gpsDataQueue = ArrayBlockingQueue<String>(5000)
+    private val accelDataQueue = ArrayBlockingQueue<String>(5000)
+    private val heartRateDataQueue = ArrayBlockingQueue<String>(5000)
+    private val gyroDataQueue = ArrayBlockingQueue<String>(5000)
+}
+```
+
+## 🔄 Background Processing
+
+### 1. Service Management
+```kotlin
+// MainActivity.kt
+class MainActivity : ComponentActivity() {
+    private fun startServices() {
+        // Start Sensor Service
+        val sensorIntent = Intent(this, SensorLoggingService::class.java)
+        startForegroundService(sensorIntent)
+
+        // Start WiFi Service
+        val wifiIntent = Intent(this, WifiService::class.java)
+        startForegroundService(wifiIntent)
     }
 }
 ```
 
-## 📊 Data Publishing Flow
+## 📡 Network Communication
 
-### 1. MQTT Publishing
-```mermaid
-sequenceDiagram
-    participant SS as SensorService
-    participant Q as Data Queue
-    participant MQTT as MQTT Broker
-
-    loop Every Second
-        SS->>Q: Check Queue
-        Q-->>SS: Data Available
-        SS->>MQTT: Publish Data
-        MQTT-->>SS: Publish Complete
-    end
-```
-
-### 2. Queue Management
+### 1. MQTT Topics
 ```kotlin
-private fun publishQueuedData() {
-    // 1. Check MQTT Connection
-    if (!mqttClient.isConnected) {
-        Log.d("AccelPublish", "Still offline – buffering data.")
-        return
-    }
-
-    // 2. Process Each Queue
-    accelDataQueue.poll()?.let { currentAccelData ->
-        publishMqttInternal(mqttTopic, currentAccelData)
-    }
-
-    // 3. Handle Heart Rate
-    heartRateDataQueue.poll()?.let { currentHeartRateData ->
-        publishMqttInternal(mqttHeartRateTopic, currentHeartRateData)
-    }
-
-    // 4. Handle GPS
-    gpsDataQueue.poll()?.let { currentGpsData ->
-        publishMqttInternal(mqttGpsTopic, currentGpsData)
-    }
-}
+// SensorLoggingService.kt
+private val mqttTopic = "wearos/accelerometer"
+private val mqttGpsTopic = "wearos/gps"
+private val mqttGyroscope = "wearos/gyroscope"
+private val mqttHeartRateTopic = "wearos/heart_rate"
+private val mqttSkinTempTopic = "wearos/skin_temp"
 ```
 
-## 🔐 Error Handling and Recovery
+## 🔍 Error Handling
 
-### 1. MQTT Connection Management
-```mermaid
-graph TD
-    A[MQTT Disconnect] --> B[Detect Disconnect]
-    B --> C[Attempt Reconnect]
-    C -->|Success| D[Resume Publishing]
-    C -->|Failure| E[Queue Data]
-    E --> C
-```
-
-### 2. Error Recovery
+### 1. Service Error Recovery
 ```kotlin
+// SensorLoggingService.kt
 private fun publishMqttInternal(topic: String, message: String, maxRetries: Int = 3) {
     var attempts = 0
     while (attempts <= maxRetries) {
         if (mqttClient.isConnected) {
             try {
-                // Attempt to publish
                 mqttClient.publish(topic, MqttMessage(message.toByteArray()))
-                return // Success
+                return
             } catch (e: MqttException) {
                 attempts++
                 if (attempts <= maxRetries) {
-                    Thread.sleep(1000) // Wait before retry
+                    Thread.sleep(1000)
                 }
             }
         } else {
-            connectMqtt() // Attempt reconnection
+            connectMqtt()
             return
         }
     }
 }
 ```
 
-## 🔄 Background Processing
+## 📱 UI Components
 
-### 1. Keep-Alive Mechanism
-```mermaid
-graph TD
-    A[Check WiFi] --> B{WiFi Connected?}
-    B -->|No| C[Wake Screen]
-    B -->|Yes| D[Skip Action]
-    C --> E[Simulate Tap]
-    E --> F[Wait Interval]
-    F --> A
-```
-
-### 2. Memory Management
+### 1. Screen Structure
 ```kotlin
-private fun logAppMemoryUsage() {
-    val runtime = Runtime.getRuntime()
-    val usedMemInMB = (runtime.totalMemory() - runtime.freeMemory()) / 1024 / 1024
-    val maxHeapSizeInMB = runtime.maxMemory() / 1024 / 1024
-    
-    Log.i("QueueMonitor", "🧠 App Used Heap: $usedMemInMB MB")
-    Log.i("QueueMonitor", "🚀 App Max Heap: $maxHeapSizeInMB MB")
+// MainActivity.kt
+@Composable
+fun AppContent(
+    currentScreen: Screen,
+    onNavigate: (Screen) -> Unit,
+    // ... other parameters
+) {
+    when (currentScreen) {
+        Screen.Login -> LoginScreen(...)
+        Screen.Home -> HomeScreen(...)
+        Screen.OptionsPage -> OptionsPage()
+    }
 }
 ```
 
-## 📱 Service Cleanup
+## 🔄 State Management
 
-### 1. Resource Cleanup
-```mermaid
-sequenceDiagram
-    participant SS as SensorService
-    participant S as Sensors
-    participant MQTT as MQTT Broker
-    participant Q as Queues
-
-    SS->>S: Unregister Listeners
-    SS->>MQTT: Disconnect
-    SS->>Q: Clear Queues
-    SS->>SS: Release WakeLock
-```
-
-### 2. Cleanup Implementation
+### 1. UI State
 ```kotlin
-override fun onDestroy() {
-    super.onDestroy()
-    // 1. Stop sensors
-    sensorManager.unregisterListener(this)
-    
-    // 2. Stop location updates
-    fusedLocationClient.removeLocationUpdates(locationCallback)
-    
-    // 3. Stop background tasks
-    keepAliveHandler.removeCallbacksAndMessages(null)
-    queueLoggerHandler.removeCallbacksAndMessages(null)
-    
-    // 4. Release resources
-    releaseWakeLock()
-    publishingScheduler.shutdown()
-    
-    // 5. Disconnect MQTT
-    disconnectMqtt()
-}
-```
-
-## 🔍 Performance Monitoring
-
-### 1. Queue Monitoring
-```kotlin
-private fun startQueueContentLogger() {
-    queueLoggerHandler.post(object : Runnable {
-        override fun run() {
-            // Log queue sizes
-            logQueueContents("accelDataQueue", accelDataQueue)
-            logQueueContents("gpsDataQueue", gpsDataQueue)
-            logQueueContents("heartRateDataQueue", heartRateDataQueue)
-            
-            // Schedule next check
-            queueLoggerHandler.postDelayed(this, queueLogIntervalMillis)
-        }
-    })
-}
-```
-
-### 2. Memory Monitoring
-```kotlin
-private fun logQueueContents(queueName: String, queue: ArrayBlockingQueue<String>): Int {
-    val items = queue.toList()
-    val approxSizeBytes = items.sumOf { it.toByteArray().size }
-    val sizeKb = approxSizeBytes / 1024
-    
-    Log.i("QueueMonitor", "===== $queueName (size=${items.size}, ~${sizeKb}KB) =====")
-    return sizeKb
-}
+// MainActivity.kt
+private val dataSendingStatus = mutableStateOf("Not sending data")
+private val gpsDataState = mutableStateOf("No GPS data yet")
+private val latitudeState = mutableStateOf("...")
+private val longitudeState = mutableStateOf("...")
+private val userIdState = mutableStateOf("")
+private val heartRateState = mutableStateOf("...")
 ```
 
 ---
 
-*This documentation details the technical implementation of the SensorLoggingService, showing how it manages sensor data collection, MQTT communication, and background processing while maintaining performance and reliability.* 
+*This documentation provides a comprehensive overview of the application's architecture, showing how different components interact and depend on each other. The structure is designed to be maintainable, scalable, and efficient in handling sensor data collection and transmission.* 
