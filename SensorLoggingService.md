@@ -1,5 +1,56 @@
 # SensorLoggingService - Technical Flow Documentation
 
+## 📝 Brief Description
+
+The SensorLoggingService is a critical background service that handles sensor data collection and transmission in the Wear OS application. Here's what it does:
+
+1. **MQTT Connection & Publishing**
+```kotlin
+// MQTT Configuration
+private lateinit var mqttClient: MqttAndroidClient
+private val mqttBrokerUri = "tcp://10.107.106.133:1883"
+private val mqttClientId = "WearOSSensorLogger"
+
+// Publishing to MQTT
+private fun publishMqttInternal(topic: String, message: String) {
+    if (mqttClient.isConnected) {
+        mqttClient.publish(topic, MqttMessage(message.toByteArray()))
+    }
+}
+```
+
+2. **Data Caching with Queues**
+```kotlin
+// Queue Configuration for Data Caching
+private val gpsDataQueue = ArrayBlockingQueue<String>(5000)      // GPS data cache
+private val accelDataQueue = ArrayBlockingQueue<String>(5000)    // Accelerometer data cache
+private val heartRateDataQueue = ArrayBlockingQueue<String>(5000) // Heart rate data cache
+private val gyroDataQueue = ArrayBlockingQueue<String>(5000)     // Gyroscope data cache
+```
+
+3. **Sensor Data Collection**
+- Accelerometer (x, y, z coordinates)
+- Heart Rate (BPM)
+- GPS Location (latitude, longitude)
+- Gyroscope (rotation data)
+- Step Detection
+- Linear Acceleration
+- Rotation Vector
+
+4. **Background Processing**
+- Maintains a foreground service to prevent system kill
+- Implements keep-alive mechanism for WiFi connection
+- Monitors memory usage and queue sizes
+- Handles automatic reconnection to MQTT broker
+
+5. **Error Recovery**
+- Implements retry mechanism for failed MQTT publishes
+- Caches data when offline
+- Automatically reconnects to MQTT broker
+- Handles sensor unavailability gracefully
+
+The service uses a queue-based architecture to ensure no data is lost when the device is offline or experiencing connectivity issues. Each sensor type has its own dedicated queue with a capacity of 5000 entries, allowing for robust data caching during network interruptions.
+
 ## 🔄 Service Overview
 
 ```mermaid
