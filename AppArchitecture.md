@@ -2,22 +2,7 @@
 
 ## 📦 Project Structure
 ```
-app/
-├── src/
-│   ├── main/
-│   │   ├── java/com/example/test_app/
-│   │   │   ├── presentation/
-│   │   │   │   ├── MainActivity.kt
-│   │   │   │   ├── SensorLoggingService.kt
-│   │   │   │   ├── WifiService.kt
-│   │   │   │   └── screens/
-│   │   │   │       ├── LoginScreen.kt
-│   │   │   │       ├── HomeScreen.kt
-│   │   │   │       └── OptionsPage.kt
-│   │   │   └── data/
-│   │   │       └── LoginCache.kt
-│   │   └── res/
-│   └── test/
+
 ```
 
 ## 🔄 Component Dependencies
