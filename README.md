@@ -89,8 +89,8 @@ sequenceDiagram
 ### Prerequisites
 - Android Wear OS device
 - Android Studio
-- Minimum SDK version: [Version]
-- Target SDK version: [Version]
+- Minimum SDK version: 30
+- Target SDK version: 30(need to be this or older because eclipse paho doesnt work for newer android api yet)
 
 ### Required Permissions
 ```xml
