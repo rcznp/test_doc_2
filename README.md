@@ -80,9 +80,9 @@ sequenceDiagram
    - Wi-Fi status
    - Logout button
 
-3. **Options Page**
-   - Additional settings
-   - Configuration options
+3. **Wifi Logs**
+
+4. **Voice Notes**
 
 ## 🔧 Setup and Configuration
 
@@ -118,7 +118,7 @@ sequenceDiagram
    - Restart WifiService
 
 2. **Sensor Data Not Updating**
-   - Verify permissions
+   - Verify permissions,go to **apps->permission manager.**
    - Check sensor availability
    - Restart SensorLoggingService
 
