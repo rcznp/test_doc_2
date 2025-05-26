@@ -38,11 +38,11 @@ graph LR
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant A as App(MainActivity.kt)
-    participant S as Sensors(SensorLoggingService.kt)
+    participant A as MainActivity.kt
+    participant S as SensorLoggingService.kt
     participant W as WiFi
-    participant TW as ThingWorx Backend (Authentication)
-    participant DB as Data Backend (MQTT/InfluxDB)
+    participant TW as ThingWorx API(Authentication)
+    participant DB as Influx DB (MQTT/InfluxDB)
 
     U->>A: Login
     A->>TW: Authenticate User
