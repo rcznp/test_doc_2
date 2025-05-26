@@ -51,7 +51,7 @@ sequenceDiagram
     S->>S: Handle & Buffer Sensor Data
     S-->>A: Data Ready for Transmission
     A->>W: Check Wi-Fi Connection
-    A->>DB: Transmit Data via MQTT
+    S->>DB: Transmit Data via MQTT
     DB->>DB: Store Data in InfluxDB
 ```
 
