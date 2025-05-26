@@ -47,10 +47,11 @@ sequenceDiagram
     A->>API: Authenticate
     API-->>A: Success
     A->>S: Start Monitoring
-    S->>A: Send Data(send data handled in sensors logic actually,not in mainactivity)
+    S->>A: Send Data
     A->>W: Check Connection
     A->>API: Transmit Data
 ```
+(Send Data handled in sensors logic actually,not in mainactivity)
 
 ## 🛠️ Technical Implementation
 
