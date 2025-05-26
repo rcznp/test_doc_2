@@ -49,7 +49,6 @@ sequenceDiagram
     TW-->>A: Authentication Success
     A->>S: Start Monitoring
     S->>S: Handle & Buffer Sensor Data
-    S-->>A: Data Ready for Transmission
     A->>W: Check Wi-Fi Connection
     S->>DB: Transmit Data via MQTT
     DB->>DB: Store Data in InfluxDB
