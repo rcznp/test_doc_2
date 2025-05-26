@@ -184,7 +184,8 @@ sequenceDiagram
     WS->>WS: Start WiFi Monitoring
     SS->>SS: Start Sensor Monitoring
 ```
-
+SensorLoggingService: This service is started by MainActivity via startForegroundService only after necessary permissions (BODY_SENSORS, ACTIVITY_RECOGNITION) are granted. Its onStartCommand method initiates sensor data collection.
+WifiService: Important Note: In the current code, the call to start WifiService ((context as? MainActivity)?.startWifiServiceOnce()) in LoginScreen is commented out. Therefore, WifiService is not automatically started on successful login. If uncommented, its onStartCommand would create Wi-Fi network suggestions and begin monitoring.
 ### 2. WifiService Flow
 ```kotlin
 class WifiService : Service() {
