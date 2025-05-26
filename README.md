@@ -40,7 +40,7 @@ sequenceDiagram
     participant U as User
     participant A as App(MainAcitivity.kt)
     participant S as Sensors(SensorLoggingService.kt)
-    participant W as WiFi(taken out since doesnt work)
+    participant W as WiFi
     participant API as Server(publishes data to specific MQTT topics)
 
     U->>A: Login
