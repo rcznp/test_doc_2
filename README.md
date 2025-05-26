@@ -38,18 +38,21 @@ graph LR
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant A as MainAcitivity.kt
-    participant S as SensorLoggingService.kt
+    participant A as App(MainActivity.kt)
+    participant S as Sensors(SensorLoggingService.kt)
     participant W as WiFi
-    participant API as Server(publishes data to specific MQTT topics)
+    participant TW as ThingWorx Backend (Authentication)
+    participant DB as Data Backend (MQTT/InfluxDB)
 
     U->>A: Login
-    A->>API: Authenticate
-    API-->>A: Success
+    A->>TW: Authenticate User
+    TW-->>A: Authentication Success
     A->>S: Start Monitoring
-    S->>S: Handle & Store Data (Internal)
-    A->>W: Check Connection
-    A->>API: Transmit Data
+    S->>S: Handle & Buffer Sensor Data
+    S-->>A: Data Ready for Transmission
+    A->>W: Check Wi-Fi Connection
+    A->>DB: Transmit Data via MQTT
+    DB->>DB: Store Data in InfluxDB
 ```
 
 
