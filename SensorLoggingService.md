@@ -111,7 +111,7 @@ sequenceDiagram
 ```
 
 ## 🔄 Data Collection Flow
-if unable to publish using MQTT,then collected sensor data are just cached into a queue,when reconnected to MQTT broker,then pop from top of queue to publish 
+**If unable to publish using MQTT,then collected sensor data are just cached into a queue,when reconnected to MQTT broker,then pop from top of queue to publish**
 
 ### 1. Sensor Data Collection
 ```mermaid
