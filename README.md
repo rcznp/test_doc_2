@@ -38,8 +38,8 @@ graph LR
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant A as App(MainAcitivity.kt)
-    participant S as Sensors(SensorLoggingService.kt)
+    participant A as MainAcitivity.kt
+    participant S as SensorLoggingService.kt
     participant W as WiFi
     participant API as Server(publishes data to specific MQTT topics)
 
