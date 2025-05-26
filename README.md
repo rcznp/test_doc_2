@@ -1,40 +1,4 @@
-# WatchApp - Android Wear OS Application Documentation
-
-## 📱 Overview
-
-WatchApp is an Android Wear OS application designed for employee monitoring and data collection. The app provides real-time tracking of various metrics including heart rate, GPS location, and Wi-Fi connectivity status.
-
-## 🎯 Key Features
-
-- **User Authentication**
-  - login system with employee ID and PIN(sent to a thingworx API endpoint to verify)
-  - Encrypted session management(to persist app state)
-
-- **Real-time Monitoring**
-  - Heart rate tracking(need to ask for permission from user if to deploy in the future)
-  - GPS location tracking
-  - Wi-Fi connectivity monitoring
-  - Step counting
-
-- **Background Services**
-  - Silent Wi-Fi reconnection
-  - Continuous sensor data collection
-  - Data transmission to server
-  - **currently silent wifi reconnection not working,using a cache queue to store the collected data until wifi reconencts back**
-
-## 🔄 Application Flow
-
-```mermaid
-graph TD
-    A[App Launch] --> B{Is User Logged In?}
-    B -->|Yes| C[Home Screen]
-    B -->|No| D[Login Screen]
-    D -->|Login Success| C
-    C -->|Logout| D
-    C -->|Background| E[Services]
-    E --> F[WifiService]
-    E --> G[SensorLoggingService]
-```
+C
 
 ## 🏗️ Architecture
 
@@ -74,16 +38,16 @@ graph LR
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant A as App
-    participant S as Sensors
-    participant W as WiFi
-    participant API as Server
+    participant A as App(MainAcitivity.kt)
+    participant S as Sensors(SensorLoggingService.kt)
+    participant W as WiFi(taken out since doesnt work)
+    participant API as Server(publishes data to specific MQTT topics)
 
     U->>A: Login
     A->>API: Authenticate
     API-->>A: Success
     A->>S: Start Monitoring
-    S->>A: Send Data
+    S->>A: Send Data(send data handled in sensors logic actually,not in mainactivity)
     A->>W: Check Connection
     A->>API: Transmit Data
 ```
