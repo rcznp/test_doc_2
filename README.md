@@ -19,20 +19,6 @@ C
    - `LoginCache`: Secure storage for user credentials
    - Encrypted SharedPreferences for sensitive data
 
-## 🔐 Security Features
-
-```mermaid
-graph LR
-    A[User Input] --> B[Encryption]
-    B --> C[Secure Storage]
-    C --> D[Encrypted SharedPreferences]
-    D --> E[MasterKey AES256]
-```
-
-- AES256 encryption for sensitive data
-- Secure credential storage
-- Permission-based access control
-
 ## 📊 Data Flow
 
 ```mermaid
