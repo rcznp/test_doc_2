@@ -13,7 +13,7 @@ C
 2. **Services**
    - `WifiService`: Manages Wi-Fi connectivity
    - `SensorLoggingService`: Collects sensor data
-   - `TouchAccessibilityService`: Handles touch events
+   - `TouchAccessibilityService`: Handles touch events(used to keep screen alive,dont need anymore)
 
 3. **Data Management**
    - `LoginCache`: Secure storage for user credentials
