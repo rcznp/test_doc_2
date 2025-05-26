@@ -7,12 +7,11 @@ WatchApp is an Android Wear OS application designed for employee monitoring and 
 ## 🎯 Key Features
 
 - **User Authentication**
-  - Secure login system with employee ID and PIN
-  - Encrypted session management
-  - Persistent login state
+  - login system with employee ID and PIN(sent to a thingworx API endpoint to verify)
+  - Encrypted session management(to persist app state)
 
 - **Real-time Monitoring**
-  - Heart rate tracking
+  - Heart rate tracking(need to ask for permission from user if to deploy in the future)
   - GPS location tracking
   - Wi-Fi connectivity monitoring
   - Step counting
@@ -21,6 +20,7 @@ WatchApp is an Android Wear OS application designed for employee monitoring and 
   - Silent Wi-Fi reconnection
   - Continuous sensor data collection
   - Data transmission to server
+  - **currently silent wifi reconnection not working,using a cache queue to store the collected data until wifi reconencts back**
 
 ## 🔄 Application Flow
 
