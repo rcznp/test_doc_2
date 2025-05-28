@@ -49,7 +49,7 @@ private val gyroDataQueue = ArrayBlockingQueue<String>(5000)     // Gyroscope da
 - Automatically reconnects to MQTT broker
 - Handles sensor unavailability gracefully
 
-The service uses a queue-based architecture to ensure no data is lost when the device is offline or experiencing connectivity issues. Each sensor type has its own dedicated queue with a capacity of 5000 entries, allowing for robust data caching during network interruptions.
+The service uses a queue-based architecture to ensure no data is lost when the device is offline or experiencing connectivity issues. Each sensor type has its own dedicated queue with a capacity of 5000 entries(arbitary value,but i tested it for a few times and it seems to cache up to 4 hours consistently and reliably,aftet that maybe due to some inherent features of the watch or memeory space it stops caching continuosly), allowing for robust data caching during network interruptions.
 
 ## 🔄 Service Overview
 
