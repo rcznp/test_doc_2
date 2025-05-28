@@ -1,4 +1,11 @@
 A Wear OS app that authenticates users, collects sensor data (heart rate, steps, GPS), and sends it via MQTT to a broker. Telegraf listens on the broker, then forwards the data to InfluxDB for storage. 
+```mermaid
+graph TD
+    A[Wear OS App] -->|Sensor Data via MQTT| B[MQTT Broker]
+    B -->|Subscribes & Forwards| C[Telegraf]
+    C -->|Writes Data| D[InfluxDB]
+```
+
 
 ## 🏗️ Architecture
 
