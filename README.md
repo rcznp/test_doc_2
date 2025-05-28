@@ -118,7 +118,8 @@ sequenceDiagram
    - Restart WifiService
 
 2. **Sensor Data Not Updating**
-   - Verify permissions,go to **apps->permission manager.**
+   - **IMPT**Sometimes when reinstalling app through ADB the permissions may be reset.Verify permissions,go to **apps->permission manager.**
+      ensure health data sensors and accessibilty permissions on.most often these are the ones that get reset.
    - Check sensor availability
    - Restart SensorLoggingService
 
