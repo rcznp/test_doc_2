@@ -62,7 +62,7 @@ This document summarizes all logging tags used across the app (especially in `Se
 
 ---
 
-## 📊 Queue Monitoring
+## 📊 Queue Monitoring (use this to check cahce queue is actually storing the sensor data when connection lost)
 
 | **Tag**        | **Description**                                         |
 | -------------- | ------------------------------------------------------- |
