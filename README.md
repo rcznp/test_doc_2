@@ -101,7 +101,7 @@ sequenceDiagram
 - Android Wear OS device
 - Android Studio
 - Minimum SDK version: 30
-- Target SDK version: 30(need to be this or older because eclipse paho doesnt work for newer android api yet)
+- Target SDK version: 30(need to be this or older because Eclipse Paho MQTT doesnt work for newer android api yet)
 
 ### Required Permissions(theres a whole lot of them,look at AndoridManifest.xml for them)
 ```xml
@@ -113,26 +113,21 @@ sequenceDiagram
 
 ## 🚀 Deployment
 
-1. Build the application
-2. Sign the APK
-3. Install on target device
-4. Configure initial settings
-5. Test all features
+...
 
 ## 🔍 Troubleshooting
 
 ### Common Issues
 
-1. **Wi-Fi Connection Issues**
-   - Check device Wi-Fi settings
-   - Verify network credentials
-   - Restart WifiService
+1. **Wi-Fi Connection Issues(Home Screen Circle is Red)**
+   - tap screen to keep the watch alive(somehow turns back on the servcies??)
 
 2. **Sensor Data Not Updating**
-   - **IMPT**Sometimes when reinstalling app through ADB the permissions may be reset.Verify permissions,go to **apps->permission manager.**
-      ensure health data sensors and accessibilty permissions on.most often these are the ones that get reset.
-   - Check sensor availability
-   - Restart SensorLoggingService
+   -Verify permissions,go to **apps->permission manager.**
+   ensure health data sensors and accessibilty permissions on.Most often these are the ones that get reset.
+   Location servcies needed for wifi reconnection(no idea why)
+   **IMPT**Sometimes when reinstalling app through ADB the permissions may be reset.
+   - Check sensor availability maybe watch dont have that sensor hardware
 
 
 ## 🤝 Support
