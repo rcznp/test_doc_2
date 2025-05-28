@@ -134,18 +134,6 @@ sequenceDiagram
    - Check sensor availability
    - Restart SensorLoggingService
 
-3. **Login Problems**
-   - Clear app data
-   - Verify credentials
-   - Check network connectivity
-
-## 📈 Future Enhancements
-
-1. Enhanced data visualization
-2. Additional sensor support
-3. Improved error handling
-4. Extended API integration
-5. Advanced security features
 
 ## 🤝 Support
 
