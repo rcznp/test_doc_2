@@ -95,7 +95,7 @@ sequenceDiagram
     participant HS as HomeScreen
     participant WL as WifiLogsScreen
     participant VN as VoiceNotesScreen
-    participant ACCT as AccountScreen
+    participant ACCT as AccountInfo (inline)
     participant TS as TasksScreen (Prototype)
 
     MA->>AC: setContent
@@ -113,7 +113,7 @@ sequenceDiagram
         else Voice Notes Selected
             AC->>VN: Navigate to VoiceNotesScreen
         else Account Selected
-            AC->>ACCT: Navigate to AccountScreen
+            AC->>ACCT: Expand inline below menu with UserID
         else Tasks Selected
             AC->>TS: Navigate to TasksScreen (Prototype)
         end
