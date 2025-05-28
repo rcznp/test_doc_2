@@ -161,6 +161,7 @@ fun LoginScreen(
 **Pre-Login Checks**: Before attempting login, the app verifies Wi-Fi connectivity. It also uses a LaunchedEffect to perform initial permission checks for BODY_SENSORS and prompts for Accessibility Service if necessary.
 
 **Simulated API Call**: sendLoginDataToApi is called. Currently, this function simulates a successful login without hitting a real API.
+**theres a commented out sendLoginDataToApi.comment back that one to use the actual login logic**
 
 **Login Success Logic**:
 If the simulated login is successful, LoginCache stores the isLoggedIn status as true and saves the userId.
