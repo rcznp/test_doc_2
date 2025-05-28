@@ -205,6 +205,7 @@ sequenceDiagram
 SensorLoggingService: This service is started by MainActivity via startForegroundService only after necessary permissions (BODY_SENSORS, ACTIVITY_RECOGNITION) are granted. Its onStartCommand method initiates sensor data collection.
 WifiService: Important Note: In the current code, the call to start WifiService ((context as? MainActivity)?.startWifiServiceOnce()) in LoginScreen is commented out. Therefore, WifiService is not automatically started on successful login. If uncommented, its onStartCommand would create Wi-Fi network suggestions and begin monitoring.
 ### 2. WifiService Flow
+Wifi background service(currently not in use) was made in the hopes of getting the watch to reconnect once out of range.but this was hard to implmenet possibily due to the smartwatch's inherent power saving features.so instead i used caching of data when out of range
 ```kotlin
 class WifiService : Service() {
     override fun onStartCommand() {
