@@ -92,7 +92,7 @@ sequenceDiagram
 - Minimum SDK version: 30
 - Target SDK version: 30(need to be this or older because eclipse paho doesnt work for newer android api yet)
 
-### Required Permissions
+### Required Permissions(theres a whole lot of them,look at AndoridManifest.xml for them)
 ```xml
 <uses-permission android:name="android.permission.BODY_SENSORS" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
