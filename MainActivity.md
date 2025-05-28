@@ -90,20 +90,37 @@ UI Setup: Jetpack Compose is used to build the UI, managed by the AppContent Com
 sequenceDiagram
     participant MA as MainActivity
     participant AC as AppContent
+    participant Menu as DropdownMenu
     participant LS as LoginScreen
     participant HS as HomeScreen
+    participant WL as WifiLogsScreen
+    participant VN as VoiceNotesScreen
+    participant ACCT as AccountScreen
+    participant TS as TasksScreen (Prototype)
 
     MA->>AC: setContent
     AC->>AC: Check currentScreen
-    alt Login Screen
+    alt Not Logged In
         AC->>LS: Render LoginScreen
         LS->>MA: onLoginSuccess
-        MA->>AC: Update currentScreen
-    else Home Screen
+        MA->>AC: Update currentScreen to Home
+    else Logged In
         AC->>HS: Render HomeScreen
+        HS->>Menu: Tap menu button
+        Menu->>AC: onOptionSelected(option)
+        alt Wifi Logs Selected
+            AC->>WL: Navigate to WifiLogsScreen
+        else Voice Notes Selected
+            AC->>VN: Navigate to VoiceNotesScreen
+        else Account Selected
+            AC->>ACCT: Navigate to AccountScreen
+        else Tasks Selected
+            AC->>TS: Navigate to TasksScreen (Prototype)
+        end
         HS->>MA: onLogout
-        MA->>AC: Update currentScreen
+        MA->>AC: Update currentScreen to Login
     end
+
 ```
 
 ## 🔐 Authentication Flow
@@ -161,13 +178,13 @@ fun LoginScreen(
 **Pre-Login Checks**: Before attempting login, the app verifies Wi-Fi connectivity. It also uses a LaunchedEffect to perform initial permission checks for BODY_SENSORS and prompts for Accessibility Service if necessary.
 
 **Simulated API Call**: sendLoginDataToApi is called. Currently, this function simulates a successful login without hitting a real API.
-**theres a commented out sendLoginDataToApi.comment back that one to use the actual login logic**
+(**theres a commented out sendLoginDataToApi.comment back that one to use the actual login logic**)
 
 **Login Success Logic**:
 If the simulated login is successful, LoginCache stores the isLoggedIn status as true and saves the userId.
 onLoginSuccess is invoked, which within AppContent, triggers the navigation to HomeScreen and calls startSensorService.
 
-**Permission-gated Service Start**: The startSensorService function first checks for BODY_SENSORS and ACTIVITY_RECOGNITION permissions. If granted, it proceeds to start the SensorLoggingService. If not, it requests the missing permissions.
+**Permission-gated Service Start**: The startSensorService function first checks for BODY_SENSORS and ACTIVITY_RECOGNITION permissions. If granted, it proceeds to start the SensorLoggingService. If not, it requests the missing permissions.(but not all of them,i cant figure how to get accessibility settings enabled)
 
 ## 🔄 Background Services Flow
 
