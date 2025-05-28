@@ -224,7 +224,16 @@ class WifiService : Service() {
 ```
 
 ### 3. SensorLoggingService Flow
+**startSensorLoggingService called in onCreate.so starts the sensorlogging service once credentials verified**
 ```kotlin
+//called in onCreate
+startSensorService = { empId, pin ->
+    // Ensure permissions (BODY_SENSORS, ACTIVITY_RECOGNITION, LOCATION) are granted
+    // If granted, start the SensorLoggingService
+    val intent = Intent(context, SensorLoggingService::class.java)
+    intent.putExtra("empId", empId)
+    ContextCompat.startForegroundService(context, intent)
+}
 
 ```
 
