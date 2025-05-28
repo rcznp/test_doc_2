@@ -90,8 +90,10 @@ sequenceDiagram
    - Logout button
 
 3. **Wifi Logs**
+   to check if the wifi reconnection logics are running
 
-4. **Voice Notes**
+5. **Voice Notes**
+   currently sent to a flask server(ran locally for now)
 
 ## 🔧 Setup and Configuration
 
