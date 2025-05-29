@@ -81,9 +81,9 @@ Explanation:
 **Initial Screen Determination**: The app checks the user's login status and cached user ID to decide whether to initially display the LoginScreen or the HomeScreen. Deep linking (launching directly to a specific screen) is also supported.
 UI Setup: Jetpack Compose is used to build the UI, managed by the AppContent Composable. It passes down navigation functions, service control lambdas, and various state variables.
 
-**onResume()**: This lifecycle method ensures that if the user is logged in, has a cached ID, but has not yet enabled the necessary Accessibility Service, a prompt will be triggered.
+**onResume()**:  ensures that if the user is logged in, has a cached ID, but has not yet enabled the necessary Accessibility Service, a prompt will be triggered.
 
-**onDestroy()**: Crucially, this method unregisters all BroadcastReceivers, preventing memory leaks when the activity is destroyed.
+**onDestroy()**: unregisters all BroadcastReceivers, preventing memory leaks when the activity is destroyed.
 
 ### 2. Screen Navigation Flow
 ```mermaid
@@ -177,7 +177,7 @@ fun LoginScreen(
 
 **Pre-Login Checks**: Before attempting login, the app verifies Wi-Fi connectivity. It also uses a LaunchedEffect to perform initial permission checks for BODY_SENSORS and prompts for Accessibility Service if necessary.
 
-**Simulated API Call**: sendLoginDataToApi is called. Currently, this function simulates a successful login without hitting a real API.
+**Simulated API Call**: sendLoginDataToApi is called. Currently, this function simulates a successful login without hitting a real API for easy testing.
 (**theres a commented out sendLoginDataToApi.comment back that one to use the actual login logic**)
 
 **Login Success Logic**:
@@ -202,7 +202,7 @@ sequenceDiagram
     WS->>WS: Start WiFi Monitoring
     SS->>SS: Start Sensor Monitoring
 ```
-SensorLoggingService: This service is started by MainActivity via startForegroundService only after necessary permissions (BODY_SENSORS, ACTIVITY_RECOGNITION) are granted. Its onStartCommand method initiates sensor data collection.
+SensorLoggingService: This is the main,core part of the sensor data collection.This service is started by MainActivity via startForegroundService only after necessary permissions (BODY_SENSORS, ACTIVITY_RECOGNITION) are granted. Its onStartCommand method initiates sensor data collection.
 WifiService: Important Note: In the current code, the call to start WifiService ((context as? MainActivity)?.startWifiServiceOnce()) in LoginScreen is commented out. Therefore, WifiService is not automatically started on successful login. If uncommented, its onStartCommand would create Wi-Fi network suggestions and begin monitoring.
 ### 2. WifiService Flow
 Wifi background service(currently not in use) was made in the hopes of getting the watch to reconnect once out of range.but this was hard to implmenet possibily due to the smartwatch's inherent power saving features.so instead i used caching of data when out of range
@@ -370,4 +370,3 @@ fun AppContent(
 
 ---
 
-*This documentation shows the main code execution paths in the application. Each component is designed to work independently while maintaining communication through well-defined interfaces and state management.*
