@@ -116,7 +116,7 @@ sequenceDiagram
 ## 🔄 Data Collection Flow
 **If unable to publish using MQTT,then collected sensor data are just cached into a queue,when reconnected to MQTT broker,then pop from top of queue to publish**
 
-### 1. Sensor Data Collection
+### 1. Sensor Data Collection(thers also linear accelration and roation vector etc.. but u get the idea)
 ```mermaid
 graph TD
     A[Sensor Event] --> B[onSensorChanged]
