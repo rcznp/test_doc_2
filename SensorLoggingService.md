@@ -67,7 +67,10 @@ graph TD
 ```
 
 ## 📱 Service Initialization Flow
-
+This service uses the MqttManager singleton to handle MQTT setup and publishing to avoid redundant reconnects and ensure a shared mqttClient across components like SensorLoggingService
+```kotlin
+MqttManager.connect(applicationContext, mqttBrokerUri, mqttClientId)
+```
 ### 1. Service Creation
 ```kotlin
 class SensorLoggingService : Service(), SensorEventListener {
