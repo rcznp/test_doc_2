@@ -172,6 +172,27 @@ fun LoginScreen(
     }
 }
 ```
+#### 📡 API Endpoint
+- **URL**: `http://10.107.106.133/Thingworx/Things/W03_API_Thing/Services/User_Authentication`
+- **Method**: `POST`
+- **Headers**:
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+  - `AppKey: <ThingWorx App Key>`
+
+#### 📝 Payload
+```json
+{
+  "emp_id": "EMPLOYEE_ID",
+  "pin": "PASSWORD"
+}
+```
+
+#### ✅ Expected Response (on success)
+```json
+{
+  "message": "Login Success!"
+}
 
 **User Input**: The user enters their Employee ID and Password.
 
