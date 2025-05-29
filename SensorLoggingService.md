@@ -236,7 +236,7 @@ private fun publishMqttInternal(topic: String, message: String, maxRetries: Int 
 
 ## 🔄 Background Processing
 
-### 1. Keep-Alive Mechanism
+### 1. Keep-Alive Mechanism(not in use anymore but its still in the code)
 ```mermaid
 graph TD
     A[Check WiFi] --> B{WiFi Connected?}
