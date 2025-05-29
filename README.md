@@ -111,7 +111,6 @@ sequenceDiagram
 <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 ```
 
-## 🚀 Deployment
 
 ...
 
@@ -130,16 +129,3 @@ sequenceDiagram
    - Check sensor availability maybe watch dont have that sensor hardware
 
 
-## 🤝 Support
-
-For technical support or feature requests, please contact:
-- Email: [Support Email]
-- Issue Tracker: [Repository URL]
-
-## 📄 License
-
-[License Information]
-
----
-
-*Documentation last updated: [Current Date]* 
