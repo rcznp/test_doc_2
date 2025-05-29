@@ -193,7 +193,7 @@ fun LoginScreen(
 {
   "message": "Login Success!"
 }
-
+```
 **User Input**: The user enters their Employee ID and Password.
 
 **Pre-Login Checks**: Before attempting login, the app verifies Wi-Fi connectivity. It also uses a LaunchedEffect to perform initial permission checks for BODY_SENSORS and prompts for Accessibility Service if necessary.
