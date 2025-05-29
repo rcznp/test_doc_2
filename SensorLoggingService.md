@@ -330,5 +330,3 @@ private fun logQueueContents(queueName: String, queue: ArrayBlockingQueue<String
 ```
 
 ---
-
-*This documentation details the technical implementation of the SensorLoggingService, showing how it manages sensor data collection, MQTT communication, and background processing while maintaining performance and reliability.* 
