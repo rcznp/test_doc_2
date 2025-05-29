@@ -70,7 +70,7 @@ sequenceDiagram
 #### SensorLoggingService
 - Collects heart rate data
 - Tracks GPS location
-- Monitors step count
+- Monitors step count(not working need activity recognition permission..)
 - Transmits data to server
 
 ## 📱 UI Components
